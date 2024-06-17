@@ -6,7 +6,7 @@ HashMap * map_new(size_t size) {
         bucket[i] = list_new();
     }
 
-    HashMap * hashmap = malloc(sizeof(hashmap));
+    HashMap * hashmap = malloc(sizeof(HashMap));
     hashmap->bucket = bucket;
     hashmap->size = size;
 
