@@ -5,9 +5,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "../kvpair/kvpair.h"
+
 typedef struct Node {
     struct Node * next;
-    void * data;
+    KVPair * pair;
 } Node;
 
 typedef struct LinkedList {
@@ -15,9 +17,11 @@ typedef struct LinkedList {
 } LinkedList;
 
 LinkedList * list_new();
-void list_push(LinkedList * list, void * item);
-void * list_find(LinkedList * list, bool (*func)(void *));
-void * list_remove(LinkedList * list, bool (*func)(void *));
+void node_free(Node * node);
+
+void list_push(LinkedList * list, KVPair * pair);
+KVPair * list_find(LinkedList * list, char * key);
+bool list_remove(LinkedList * list, char * key);
 void list_display(LinkedList * list);
 
 #endif // LINKEDLIST_H

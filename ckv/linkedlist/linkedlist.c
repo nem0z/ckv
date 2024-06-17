@@ -7,46 +7,50 @@ LinkedList * list_new() {
     return list;
 }
 
-void list_push(LinkedList * list, void * item) {
+void node_free(Node * node) {
+    kvpair_free(node->pair);
+    free(node);
+}
+
+void list_push(LinkedList * list, KVPair * pair) {
     if(list == NULL) return;
 
     Node * node = malloc(sizeof(Node));
     node->next = list->head;
-    node->data = item;
+    node->pair = pair;
 
     list->head = node;
 }
 
-void * list_find(LinkedList * list, bool (*func)(void *)) {
+KVPair * list_find(LinkedList * list, char * key) {
     if(list == NULL || list->head == NULL) return NULL;
-    if(func == NULL) return NULL;
+    if(key == NULL) return NULL;
 
-    Node * current = list->head;
-    for(; current != NULL; current = current->next) {
-        if(func(current->data)) return current->data;
+    for(Node * n = list->head; n != NULL; n = n->next) {
+        if(kvpair_eq(n->pair, key)) {
+            return n->pair;
+        }
     }
-
+    
     return NULL;
 }
 
-void * list_remove(LinkedList * list, bool (*func)(void *)) {
-    if(list == NULL || list->head == NULL) return NULL;
-    if(func == NULL) return NULL;
+bool list_remove(LinkedList * list, char * key) {
+    if(list == NULL || list->head == NULL) return false;
+    if(key == NULL) return false;
 
-    Node * current = list->head;
     Node * prev = NULL;
-    for(; current != NULL; current = current->next) {
-        if(func(current->data)) {
-            prev->next = current->next;
-            void * data = current->data;
-            free(current);
-            return data;
+    for(Node * n = list->head; n != NULL; n = n->next) {
+        if(kvpair_eq(n->pair, key)) {
+            prev->next = n->next;
+            node_free(n);
+            return true;
         }
-
-        prev = current;
+            
+        prev = n;
     }
-
-    return NULL;
+    
+    return false;
 }
 
 void list_display(LinkedList * list) {
@@ -61,7 +65,12 @@ void list_display(LinkedList * list) {
     }
 
     Node * current = list->head;
-    for(size_t i = 0; current != NULL; current = current->next) {
-        printf("List element (%zu) : %p\n", ++i, current->data);
+    for(size_t i = 0; current != NULL; current = current->next, ++i) {
+        if(current->pair == NULL) {
+            printf("List(%zu) : NULL", i);
+            continue;
+        }
+
+        printf("List(%zu) : %s => %s\n", i, current->pair->key, current->pair->value);
     }
 }

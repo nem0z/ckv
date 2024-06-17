@@ -13,14 +13,6 @@ HashMap * map_new(size_t size) {
     return hashmap;
 }
 
-KVPair * kvpair_new(char * key, char * value) {
-    KVPair * kvp = malloc(sizeof(KVPair));
-    kvp->key = key;
-    kvp->value = value;
-
-    return kvp;
-}
-
 size_t map_compute_index(char * key, size_t bucket_size) {
     size_t cpt = 0;
     for(size_t i = 0; key[i] != '\0'; ++i) {
@@ -32,44 +24,40 @@ size_t map_compute_index(char * key, size_t bucket_size) {
 
 void map_set(HashMap * hashmap, char * key, char * value) {
     size_t index = map_compute_index(key, hashmap->size);
-    KVPair * kvp = kvpair_new(key, value);
-    list_push(hashmap->bucket[index], kvp);
+    KVPair * pair = kvpair_new(key, value);
+
+    list_push(hashmap->bucket[index], pair);
 }
 
 char * map_get(HashMap * hashmap, char * key) {
     size_t index = map_compute_index(key, hashmap->size);
     LinkedList * list = hashmap->bucket[index];
 
-    if(list == NULL || list->head == NULL) return NULL;
-
-    for(Node * n = list->head; n != NULL; n = n->next) {
-        if(n->data == NULL) continue;
-        KVPair * kvp = (KVPair *)n->data;
-        if(strcmp(kvp->key, key) == 0) return kvp->value; // strncomp
-    }
-
-    return NULL;
+    KVPair * pair = list_find(list, key);
+    return pair->value;
 }
 
-// void map_delete(HashMap * hashmap, char * key) {
-//     size_t index = map_compute_hash(key, hashmap->size);
-//     LinkedList * list = hashmap->bucket[index];
+bool map_delete(HashMap * hashmap, char * key) {
+    size_t index = map_compute_index(key, hashmap->size);
+    LinkedList * list = hashmap->bucket[index];
 
-//     if(list == NULL || list->head == NULL) return;
+    return list_remove(list, key);
+}
 
-//     Node * prev = NULL;
-//     for(Node * n = list->head; n != NULL; n = n->next) {
-//         if(n->data == NULL) continue;
-//         KVPair * kvp = (KVPair *)n->data;
-//         if(strcmp(kvp->key, key) == 0) { // strncomp
-//             prev->next = n->next;
-//             free(kvp);
-//             free(n);
-//             return;
-//         }
+void map_display(HashMap * map) {
+    if(map == NULL) {
+        printf("Map is NULL\n");
+        return;
+    }
 
-//         prev = n;
-//     }
+    if(map->bucket == NULL) {
+        printf("Bucket is NULL\n");
+        return;
+    }
 
-//     return;
-// }
+    for(size_t i = 0; i < map->size; ++i) {
+        printf("Map (%zu)\n", i);
+        list_display(map->bucket[i]);
+        printf("\n");
+    }
+}
