@@ -34,7 +34,7 @@ char * map_get(HashMap * hashmap, char * key) {
     LinkedList * list = hashmap->bucket[index];
 
     KVPair * pair = list_find(list, key);
-    return pair->value;
+    return pair == NULL ? NULL : pair->value;
 }
 
 bool map_delete(HashMap * hashmap, char * key) {

@@ -13,6 +13,8 @@ int main(void) {
     map_set(hashmap, "Key4", "Value4");
     map_set(hashmap, "Key5", "Value5");
 
+    map_delete(hashmap, "Key2");
+
     char * kvp1 = map_get(hashmap, "Key1");
     char * kvp2 = map_get(hashmap, "Key2");
     char * kvp3 = map_get(hashmap, "Key3");
