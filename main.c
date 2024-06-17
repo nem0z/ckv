@@ -23,6 +23,8 @@ int main(void) {
 
     map_display(hashmap);
 
+    map_free(hashmap);
+
     return EXIT_SUCCESS;
 }
 

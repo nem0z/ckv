@@ -13,6 +13,21 @@ HashMap * map_new(size_t size) {
     return hashmap;
 }
 
+void map_free(HashMap * hashmap) {
+    if(hashmap == NULL) return;
+    if(hashmap->bucket == NULL) {
+        free(hashmap);
+        return;
+    }
+
+    for(size_t i = 0; i < hashmap->size; ++i) {
+        list_free(hashmap->bucket[i]);
+    }
+
+    free(hashmap->bucket);
+    free(hashmap);
+}
+
 size_t map_compute_index(char * key, size_t bucket_size) {
     size_t cpt = 0;
     for(size_t i = 0; key[i] != '\0'; ++i) {
@@ -44,20 +59,20 @@ bool map_delete(HashMap * hashmap, char * key) {
     return list_remove(list, key);
 }
 
-void map_display(HashMap * map) {
-    if(map == NULL) {
+void map_display(HashMap * hashmap) {
+    if(hashmap == NULL) {
         printf("Map is NULL\n");
         return;
     }
 
-    if(map->bucket == NULL) {
+    if(hashmap->bucket == NULL) {
         printf("Bucket is NULL\n");
         return;
     }
 
-    for(size_t i = 0; i < map->size; ++i) {
+    for(size_t i = 0; i < hashmap->size; ++i) {
         printf("Map (%zu)\n", i);
-        list_display(map->bucket[i]);
+        list_display(hashmap->bucket[i]);
         printf("\n");
     }
 }

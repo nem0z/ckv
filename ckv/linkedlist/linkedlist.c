@@ -7,6 +7,24 @@ LinkedList * list_new() {
     return list;
 }
 
+void list_free(LinkedList * list) {
+    if(list == NULL) return;
+
+    Node * prev = list->head;
+    if(prev == NULL) {
+        free(list);
+        return;
+    }
+
+    for(Node * n = prev->next; n != NULL; n = n->next) {
+        node_free(prev);
+        prev = n;
+    }
+
+    node_free(prev);
+    free(list);
+}
+
 void node_free(Node * node) {
     kvpair_free(node->pair);
     free(node);
