@@ -21,6 +21,10 @@ int main(void) {
 
     printf("%s - %s - %s\n", kvp1, kvp2, kvp3);
 
+    free(kvp1);
+    free(kvp2);
+    free(kvp3);
+
     map_display(hashmap);
 
     map_free(hashmap);

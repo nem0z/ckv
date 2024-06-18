@@ -17,6 +17,7 @@ typedef struct LinkedList {
 } LinkedList;
 
 LinkedList * list_new();
+void list_free(LinkedList * list);
 void node_free(Node * node);
 
 void list_push(LinkedList * list, KVPair * pair);

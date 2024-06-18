@@ -1,4 +1,4 @@
-SRC	=	main.c ckv/ckv.c ckv/kvpair/kvpair.c ckv/linkedlist/linkedlist.c ckv/hashmap/hashmap.c
+SRC	=	main.c ckv/ckv.c ckv/kvpair/kvpair.c ckv/linkedlist/linkedlist.c ckv/hashmap/hashmap.c ckv/utils/utils.c
 
 CFLAGS	=	-Iinclude -W -Wall -Wextra
 
