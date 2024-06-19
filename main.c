@@ -27,6 +27,14 @@ int main(void) {
 
     map_display(hashmap);
 
+    FILE * stream = fopen("db.txt", "w");
+    if(stream == NULL) {
+        fprintf(stderr, "Cannot open file for writing\n");
+        exit(EXIT_FAILURE);
+    }
+
+    map_fwrite(hashmap, stream);
+
     map_free(hashmap);
 
     return EXIT_SUCCESS;

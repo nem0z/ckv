@@ -92,3 +92,21 @@ void list_display(LinkedList * list) {
         printf("List(%zu) : %s => %s\n", i, current->pair->key, current->pair->value);
     }
 }
+
+bool list_fwrite(LinkedList * list, FILE * stream) {   
+    if(list == NULL || stream == NULL) return false;
+
+    char * end = malloc(sizeof(char));
+    end[0] = LIST_ENDLINE;
+
+    for(Node * n = list->head; n != NULL; n = n->next) {
+        if(!kvpair_fwrite(n->pair, stream)) return false;
+    }
+
+    if(fwrite(end, 1, 1, stream) != 1) {
+        fprintf(stderr, "Error writting list endline ! %d\n", errno);
+        return false;
+    }
+
+    return true;
+}

@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdio.h>
 
 #include "../linkedlist/linkedlist.h"
 
@@ -20,5 +21,6 @@ char * map_get(HashMap * hashmap, char * key);
 bool map_delete(HashMap * hashmap, char * key);
 
 void map_display(HashMap * hashmap);
+bool map_fwrite(HashMap * map, FILE * stream);
 
 #endif // HASHMAP_H

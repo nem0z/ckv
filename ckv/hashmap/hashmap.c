@@ -76,3 +76,13 @@ void map_display(HashMap * hashmap) {
         printf("\n");
     }
 }
+
+bool map_fwrite(HashMap * map, FILE * stream) {
+    if(map == NULL || map->bucket == NULL || stream == NULL) return false;
+
+    for(size_t i = 0; i < map->size; ++i) {
+        if(!list_fwrite(map->bucket[i], stream)) return false;
+    }
+
+    return true;
+}
