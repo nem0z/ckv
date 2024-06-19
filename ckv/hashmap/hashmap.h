@@ -22,5 +22,6 @@ bool map_delete(HashMap * hashmap, char * key);
 
 void map_display(HashMap * hashmap);
 bool map_fwrite(HashMap * map, FILE * stream);
+HashMap * map_fread(FILE * stream);
 
 #endif // HASHMAP_H

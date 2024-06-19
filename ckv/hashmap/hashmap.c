@@ -86,3 +86,31 @@ bool map_fwrite(HashMap * map, FILE * stream) {
 
     return true;
 }
+
+HashMap * map_fread(FILE * stream) {
+    size_t bucket_size = 1;
+    size_t i = 0;
+    LinkedList ** list_bucket = malloc(bucket_size * sizeof(LinkedList *));
+
+    for(;;) {
+        LinkedList * list = list_fread(stream);
+        if(list == NULL) break;
+
+        if(i >= bucket_size) {
+            bucket_size *= 2;
+            list_bucket = realloc(list_bucket, bucket_size * sizeof(LinkedList *));
+        }
+
+        list_bucket[i] = list;
+        ++i;
+    }
+
+    HashMap * map = map_new(i);
+    for(size_t j = 0; j < i; ++j) {
+        free(map->bucket[j]);
+        map->bucket[j] = list_bucket[j];
+    }
+
+    free(list_bucket);
+    return map;
+}

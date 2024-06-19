@@ -28,5 +28,6 @@ KVPair * list_find(LinkedList * list, char * key);
 bool list_remove(LinkedList * list, char * key);
 void list_display(LinkedList * list);
 bool list_fwrite(LinkedList * list, FILE * stream);
+LinkedList * list_fread(FILE * stream);
 
 #endif // LINKEDLIST_H

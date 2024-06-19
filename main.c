@@ -4,6 +4,21 @@
 #include "ckv/ckv.h"
 
 int main(void) {
+    FILE * stream = fopen("db.txt", "rb+");
+    if(stream == NULL) {
+        fprintf(stderr, "Cannot open file for reading\n");
+        exit(EXIT_FAILURE);
+    }
+
+    HashMap * map = map_fread(stream);
+    map_display(map);
+    map_free(map);
+
+    if(fclose(stream) == EOF) {
+        fprintf(stderr, "Error closing the file");
+        exit(EXIT_FAILURE);
+    }
+    stream = NULL;
 
     HashMap * hashmap = map_new(2);
 
@@ -27,15 +42,21 @@ int main(void) {
 
     map_display(hashmap);
 
-    FILE * stream = fopen("db.txt", "w");
+    stream = fopen("db.txt", "wb+");
     if(stream == NULL) {
         fprintf(stderr, "Cannot open file for writing\n");
         exit(EXIT_FAILURE);
     }
 
-    map_fwrite(hashmap, stream);
-
+    if(!map_fwrite(hashmap, stream)) {
+        fprintf(stderr, "Error writing hashmap to file\n");
+    }
     map_free(hashmap);
+
+    if(fclose(stream) == EOF) {
+        fprintf(stderr, "Error closing the file");
+        exit(EXIT_FAILURE);
+    }
 
     return EXIT_SUCCESS;
 }

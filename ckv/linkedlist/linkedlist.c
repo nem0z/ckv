@@ -96,17 +96,51 @@ void list_display(LinkedList * list) {
 bool list_fwrite(LinkedList * list, FILE * stream) {   
     if(list == NULL || stream == NULL) return false;
 
-    char * end = malloc(sizeof(char));
-    end[0] = LIST_ENDLINE;
-
     for(Node * n = list->head; n != NULL; n = n->next) {
         if(!kvpair_fwrite(n->pair, stream)) return false;
     }
 
+    char * end = malloc(sizeof(char));
+    end[0] = LIST_ENDLINE;
+
     if(fwrite(end, 1, 1, stream) != 1) {
-        fprintf(stderr, "Error writting list endline ! %d\n", errno);
+        fprintf(stderr, "Error writing list endline ! %d\n", errno);
+        free(end);
         return false;
     }
 
+    free(end);
     return true;
+}
+
+LinkedList * list_fread(FILE * stream) {
+    if(stream == NULL) return NULL;
+
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read = getline(&line, &len, stream);
+    if(read == -1) {
+        free(line);
+        return NULL;
+    }
+
+    LinkedList * list = list_new();
+
+    char * key;
+    char * value;
+
+    for(size_t i = 0; i < (size_t)(read-1); ++i) {
+        key = line + i;
+
+        while(line[++i] != '\0');
+        value = line + i + 1;
+    
+        while(line[++i] != '\0');
+
+        KVPair * pair = kvpair_new(key, value);
+        list_push(list, pair);
+    }
+
+    free(line);
+    return list;
 }

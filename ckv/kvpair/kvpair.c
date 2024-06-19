@@ -29,12 +29,12 @@ bool kvpair_fwrite(KVPair * pair, FILE * stream) {
     if(pair == NULL || stream == NULL) return false;
 
     if(fwrite(pair->key, strlen(pair->key)+1, 1, stream) != 1) {
-        fprintf(stderr, "Error writting key ! %d", errno);
+        fprintf(stderr, "Error writing key ! %d\n", errno);
         return false;
     }
 
     if(fwrite(pair->value, strlen(pair->value)+1, 1, stream) != 1) {
-        fprintf(stderr, "Error writting value ! %d\n", errno);
+        fprintf(stderr, "Error writing value ! %d\n", errno);
         return false;
     }
 
