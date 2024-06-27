@@ -27,6 +27,7 @@ int main(void) {
     map_set(hashmap, "Key3", "Value3");
     map_set(hashmap, "Key4", "Value4");
     map_set(hashmap, "Key5", "Value5");
+    map_set(hashmap, "Key3", "Value5-2");
 
     map_delete(hashmap, "Key2");
 

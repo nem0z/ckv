@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "../linkedlist/linkedlist.h"
+#include "../utils/utils.h"
 
 typedef struct HashMap {
     LinkedList ** bucket;

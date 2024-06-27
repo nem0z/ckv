@@ -39,9 +39,19 @@ size_t map_compute_index(char * key, size_t bucket_size) {
 
 void map_set(HashMap * hashmap, char * key, char * value) {
     size_t index = map_compute_index(key, hashmap->size);
-    KVPair * pair = kvpair_new(key, value);
+    LinkedList * list = hashmap->bucket[index];
+    list_display(list);
 
-    list_push(hashmap->bucket[index], pair);
+    KVPair * pair = list_find(list, key);
+    if(pair != NULL) {
+        free(pair->value);
+        char * cpy_value = safecpy(value);
+        pair->value = cpy_value;
+        return;
+    }
+
+    KVPair * new_pair = kvpair_new(key, value);
+    list_push(list, new_pair);
 }
 
 char * map_get(HashMap * hashmap, char * key) {
